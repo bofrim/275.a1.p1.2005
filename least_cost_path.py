@@ -26,21 +26,3 @@ def least_cost_path (graph, start, dest, cost):
 
 		>>> cost = lambda u, v: weights.get((u, v), float("inf"))
 		>>> least_cost_path(graph, 1,5, cost) [1, 3, 6, 5] """
-
-
-	    '''
-	    Dijkstras pseudocode:
-
-	    reached = {} (empty dictionary)
-	    runners = { (time, v, v) }
-
-	    while runners is not empty
-	        extract (time, goal, start) with minimum time from runners
-	            if goal in reached
-	                continue        (ignore this runner and restart the loop)
-	            reached[goal] = (start, time)
-	    for each succ in goal
-	      add runner (time + cost(goal, succ), succ, goal) to runners
-	         (this new runner will reach succ at the given time)
-	    return reached
-	    '''

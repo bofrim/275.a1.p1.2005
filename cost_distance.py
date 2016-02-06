@@ -15,6 +15,6 @@ def cost_distance (u, v):
     delta_x = u[0] - v[0]
     delta_y = u[1] - v[1]
 
-    distance = sqrt((delta_x**2)*(delta_y**2))
+    distance = sqrt((delta_x**2)+(delta_y**2))
 
     return int(distance)
