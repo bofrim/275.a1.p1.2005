@@ -18,6 +18,8 @@ def main():
 		start = closest_vert(startlat,startlon,vert_dict)
 		end = closest_vert(destlat,destlon,vert_dict)
 
+		print("great success")
+
 
 
 
