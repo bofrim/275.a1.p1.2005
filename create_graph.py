@@ -29,4 +29,4 @@ def create_graph(filename):
                 graph.add_edge(lineinput[1],lineinput[2],weight)
                 edge_dict[(point1,point2)] = lineinput[3]
 
-    return graph
+    return graph,vert_dict

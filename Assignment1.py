@@ -6,7 +6,7 @@ import sys
 
 def main():
 	filename = sys.argv[1]
-	graph = create_graph(filename)
+	graph,vert_dict = create_graph(filename)
 
 	userin = input().split()
 	if userin[0] == 'R':
