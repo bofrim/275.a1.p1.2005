@@ -1,4 +1,4 @@
-import least_cost_path
+from least_cost_path import least_cost_path
 from dijkstras import dijkstras
 from create_graph import create_graph
 from closest_vert import closest_vert
@@ -23,7 +23,9 @@ def main():
 		#print(graph._alist)
 		#print("neighbors1: "+str(list(graph.neighbours_and_weights(start))))
 
-		print(dijkstras(start, graph, vert_dict))
+		path = least_cost_path(graph, start, end, 0, vert_dict)
+
+		print(path)
 
 		print("great success")
 

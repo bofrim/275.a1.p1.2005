@@ -1,4 +1,6 @@
-def least_cost_path (graph, start, dest, cost):
+from dijkstras import dijkstras
+
+def least_cost_path (graph, start, dest, cost, vert_dict):
 	"""Find and return the least cost path in graph from start
 	vertex to dest vertex. Efficiency: If E is the number of edges,
 	the run-time is O( E log(E) ).
@@ -26,3 +28,15 @@ def least_cost_path (graph, start, dest, cost):
 
 		>>> cost = lambda u, v: weights.get((u, v), float("inf"))
 		>>> least_cost_path(graph, 1,5, cost) [1, 3, 6, 5] """
+	reached = dijkstras(start, graph, vert_dict)
+	path = []
+	ID = dest
+	cost = reached[dest][1]
+	print('ID: ', ID)
+	print('Start:', start)
+	while(ID != start):
+		print(ID)
+		path.append(ID)
+		ID = reached[ID][0]
+
+	return path
