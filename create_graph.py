@@ -1,6 +1,6 @@
 
 import cost_distance
-from graph
+from graph import WeightedGraph
 
 def create_graph(filename):
 
@@ -28,3 +28,5 @@ def create_graph(filename):
 
                 graph.add_edge(lineinput[1],lineinput[2],weight)
                 edge_dict[(point1,point2)] = lineinput[3]
+
+    return graph
