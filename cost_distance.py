@@ -1,3 +1,5 @@
+from math import sqrt
+
 def cost_distance (u, v):
     '''Computes and returns the straight-line distance between the two vertices
     u and v.
@@ -8,21 +10,11 @@ def cost_distance (u, v):
 
     Returns:
         numeric value: the distance between the two vertices.
-'''
+    '''
 
+    delta_x = u[0] - v[0]
+    delta_y = u[1] - v[1]
 
-'''
-Dijkstras pseudocode:
+    distance = sqrt((delta_x**2)*(delta_y**2))
 
-reached = {} (empty dictionary)
-runners = { (time, v, v) }
-while runners is not empty
-   extract (time, goal, start) with minimum time from runners
-   if goal in reached
-      continue        (ignore this runner and restart the loop)
-   reached[goal] = (start, time)
-   for each succ in goal
-      add runner (time + cost(goal, succ), succ, goal) to runners
-         (this new runner will reach succ at the given time)
-return reached
-'''
+    return distance
