@@ -12,8 +12,11 @@ def dijkstras(start_vert, graph, vert_dict):
 
 	#While there are still runners traveling between nodes
 	while(runners):
+		print("\nrunners: ", runners)
+
 		#get the least cost runner
 		run = heappop(runners)
+		print("popped: ", run)
 		cost = run[0]
 		dest = run[1]
 		source = run[2]
@@ -26,8 +29,11 @@ def dijkstras(start_vert, graph, vert_dict):
 		#start location and the cost it took to get there
 		reached[dest] = (source, cost)
 
+		print("neighbours_and_weights: ", graph.neighbours_and_weights(dest))
 		for adjacent in graph.neighbours_and_weights(dest):
 			#print("dest: ", vert_dict[dest])
 			#print("adjacent: ", vert_dict[adjacent[0]])
+			print("adjacent: ", adjacent)
 			heappush(runners, (cost + cost_distance(vert_dict[adjacent[0]], vert_dict[dest]), adjacent[0], dest))
+	print("reached: ", reached)
 	return reached

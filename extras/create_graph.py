@@ -5,7 +5,6 @@ from graph import WeightedGraph
 def create_graph(filename):
 
     graph = WeightedGraph()
-    #Gives the first line command-line arguement
 
     with open(filename) as file:
         vert_dict = {}
