@@ -1,7 +1,4 @@
-from least_cost_path import least_cost_path
-from dijkstras import dijkstras
-from create_graph import create_graph
-from closest_vert import closest_vert
+from heapq import *
 from math import sqrt
 import sys
 #R 5365386 -1133915 5364728 -11335891
@@ -102,6 +99,38 @@ class WeightedGraph (Graph):
 #==========================================================================
 #==========================================================================
 
+def create_graph(filename):
+
+    graph = WeightedGraph()
+
+    with open(filename) as file:
+        vert_dict = {}
+        edge_dict = {}
+        for line in file: # Variable 'line' loops over each line in the file
+            line = line.strip() # Remove trailing newline character
+        # Process the line here
+            lineinput = line.split(",")
+
+            if lineinput[0] == 'V':
+                latitude = int(float(lineinput[2])*100000)
+                longitude = int(float(lineinput[3])*100000)
+                graph.add_vertex(int(lineinput[1]))
+                vert_dict[int(lineinput[1])] = (latitude, longitude)
+
+            elif lineinput[0] == 'E':
+                point1 = vert_dict[int(lineinput[1])]
+                point2 = vert_dict[int(lineinput[2])]
+                weight = cost_distance(point1,point2)
+
+                graph.add_edge(int(lineinput[1]),int(lineinput[2]),weight)
+                edge_dict[lineinput[1],lineinput[2]] = lineinput[3]
+
+
+    return graph,vert_dict
+
+#==========================================================================
+#==========================================================================
+
 def dijkstras(start_vert, graph, vert_dict):
 	reached = {}
 	runners = []
@@ -136,38 +165,6 @@ def dijkstras(start_vert, graph, vert_dict):
 			heappush(runners, (cost + cost_distance(vert_dict[adjacent[0]], vert_dict[dest]), adjacent[0], dest))
 	print("reached: ", reached)
 	return reached
-
-#==========================================================================
-#==========================================================================
-
-def create_graph(filename):
-
-    graph = WeightedGraph()
-
-    with open(filename) as file:
-        vert_dict = {}
-        edge_dict = {}
-        for line in file: # Variable 'line' loops over each line in the file
-            line = line.strip() # Remove trailing newline character
-        # Process the line here
-            lineinput = line.split(",")
-
-            if lineinput[0] == 'V':
-                latitude = int(float(lineinput[2])*100000)
-                longitude = int(float(lineinput[3])*100000)
-                graph.add_vertex(int(lineinput[1]))
-                vert_dict[int(lineinput[1])] = (latitude, longitude)
-
-            elif lineinput[0] == 'E':
-                point1 = vert_dict[int(lineinput[1])]
-                point2 = vert_dict[int(lineinput[2])]
-                weight = cost_distance(point1,point2)
-
-                graph.add_edge(int(lineinput[1]),int(lineinput[2]),weight)
-                edge_dict[lineinput[1],lineinput[2]] = lineinput[3]
-
-
-    return graph,vert_dict
 
 #==========================================================================
 #==========================================================================
