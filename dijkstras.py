@@ -26,11 +26,8 @@ def dijkstras(start_vert, graph, vert_dict):
 		#start location and the cost it took to get there
 		reached[dest] = (source, cost)
 
-
 		for adjacent in graph.neighbours_and_weights(dest):
 			#print("dest: ", vert_dict[dest])
 			#print("adjacent: ", vert_dict[adjacent[0]])
 			heappush(runners, (cost + cost_distance(vert_dict[adjacent[0]], vert_dict[dest]), adjacent[0], dest))
-
-
 	return reached

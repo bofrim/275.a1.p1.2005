@@ -16,10 +16,12 @@ def main():
 		startlon = userin[2]
 		destlat = userin[3]
 		destlon = userin[4]
+
 		print("begin mayhem!!!")
 
 		start = closest_vert(startlat,startlon,vert_dict)
 		end = closest_vert(destlat,destlon,vert_dict)
+
 		#print(graph._alist)
 		#print("neighbors1: "+str(list(graph.neighbours_and_weights(start))))
 

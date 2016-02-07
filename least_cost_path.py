@@ -31,6 +31,7 @@ def least_cost_path (graph, start, dest, cost, vert_dict):
 	reached = dijkstras(start, graph, vert_dict)
 	path = []
 	ID = dest
+	print(reached)
 	cost = reached[dest][1]
 	print('ID: ', ID)
 	print('Start:', start)
