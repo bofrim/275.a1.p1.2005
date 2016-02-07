@@ -4,6 +4,8 @@ class Graph:
 
     def __init__ (self):
         self._alist = {}
+        self.vert_dict = {}
+		self.edge_dict = {}
 
     def add_vertex (self, vertex):
         ''' Adds 'vertex' to the graph

@@ -8,93 +8,8 @@ import sys
 #==========================================================================
 
 
-class Graph:
-    '''A graph has a set of vertices and a set of edges, with each
-    edge being an ordered pair of vertices. '''
+from graph import*
 
-    def __init__ (self):
-        self._alist = {}
-
-    def add_vertex (self, vertex):
-        ''' Adds 'vertex' to the graph
-        Preconditions: None
-        Postconditions: self.is_vertex(vertex) -> True
-        '''
-        if vertex not in self._alist:
-            self._alist[vertex] = set()
-
-    def add_edge (self, source, destination):
-        ''' Adds the edge (source, destination)
-        Preconditions: None
-        Postconditions:
-        self.is_vertex(source) -> True,
-        self.is_vertex(destination),
-        self.is_edge(source, destination) -> True
-        '''
-        self.add_vertex(source)
-        self.add_vertex(destination)
-        self._alist[source].add(destination)
-
-    def is_edge (self, source, destination):
-        '''Checks whether (source, destination) is an edge
-        '''
-        return (self.is_vertex(source)
-                and destination in self._alist[source])
-
-    def is_vertex (self, vertex):
-        '''Checks whether vertex is in the graph.
-        '''
-        return vertex in self._alist
-
-    def neighbours (self, vertex):
-        '''Returns the set of neighbours of vertex. DO NOT MUTATE
-        THIS SET.
-        Precondition: self.is_vertex(vertex) -> True
-        '''
-        return self._alist[vertex]
-
-    def vertices (self):
-        '''Returns a set-like container of the vertices of this
-        graph.'''
-        return self._alist.keys()
-
-class WeightedGraph (Graph):
-    '''A weighted graph stores some extra information (usually a
-    "weight") for each edge.'''
-
-    def add_vertex (self, vertex):
-        ''' Adds 'vertex' to the graph
-        Preconditions: None
-        Postconditions: self.is_vertex(vertex) -> True
-        '''
-        if vertex not in self._alist:
-            self._alist[vertex] = {}
-
-    def add_edge (self, source, destination, weight=None):
-        ''' Adds the edge (source, destination) with given weight
-        Preconditions: None
-        Postconditions:
-        self.is_vertex(source) -> True,
-        self.is_vertex(destination),
-        self.is_edge(source, destination) -> True
-        '''
-        self.add_vertex(source)
-        self.add_vertex(destination)
-        self._alist[source][destination] = weight
-
-    def get_weight (self, source, destination):
-        '''Returns the weight associated with this edge.
-        Precondition: self.is_edge(source, destination) -> True'''
-        return self._alist[source][destination]
-
-    def neighbours (self, vertex):
-        '''Returns the set of neighbours of vertex.
-        Precondition: self.is_vertex(vertex) -> True
-        '''
-        return self._alist[vertex].keys()
-
-    def neighbours_and_weights (self, vertex):
-        return self._alist[vertex].items()
 
 #==========================================================================
 #==========================================================================
@@ -104,8 +19,6 @@ def create_graph(filename):
     graph = WeightedGraph()
 
     with open(filename) as file:
-        vert_dict = {}
-        edge_dict = {}
         for line in file: # Variable 'line' loops over each line in the file
             line = line.strip() # Remove trailing newline character
         # Process the line here
@@ -115,7 +28,7 @@ def create_graph(filename):
                 latitude = int(float(lineinput[2])*100000)
                 longitude = int(float(lineinput[3])*100000)
                 graph.add_vertex(int(lineinput[1]))
-                vert_dict[int(lineinput[1])] = (latitude, longitude)
+                graph.vert_dict[int(lineinput[1])] = (latitude, longitude)
 
             elif lineinput[0] == 'E':
                 point1 = vert_dict[int(lineinput[1])]
@@ -123,15 +36,15 @@ def create_graph(filename):
                 weight = cost_distance(point1,point2)
 
                 graph.add_edge(int(lineinput[1]),int(lineinput[2]),weight)
-                edge_dict[lineinput[1],lineinput[2]] = lineinput[3]
+                graph.edge_dict[lineinput[1],lineinput[2]] = lineinput[3]
 
 
-    return graph,vert_dict
+    return graph
 
 #==========================================================================
 #==========================================================================
 
-def dijkstras(start_vert, graph, vert_dict):
+def dijkstras(start_vert, graph):
 	reached = {}
 	runners = []
 	#initialize runners with the start value
@@ -160,9 +73,9 @@ def dijkstras(start_vert, graph, vert_dict):
 		print("neighbours_and_weights: ", graph.neighbours_and_weights(dest))
 		for adjacent in graph.neighbours_and_weights(dest):
 			#print("dest: ", vert_dict[dest])
-			#print("adjacent: ", vert_dict[adjacent[0]])
+			#print("adjacent: ", graph.vert_dict[adjacent[0]])
 			print("adjacent: ", adjacent)
-			heappush(runners, (cost + cost_distance(vert_dict[adjacent[0]], vert_dict[dest]), adjacent[0], dest))
+			heappush(runners, (cost + cost_distance(graph.vert_dict[adjacent[0]], graph.vert_dict[dest]), adjacent[0], dest))
 	print("reached: ", reached)
 	return reached
 
@@ -189,12 +102,12 @@ def cost_distance (u, v):
 #==========================================================================
 #==========================================================================
 
-def closest_vert(x1,y1,vert_dict):
+def closest_vert(x1,y1,graph):
 
 	distance = 100000000
 	arbitrary_vert = (int(x1),int(y1))
-	for i in vert_dict:
-		tempdistance = cost_distance(arbitrary_vert,vert_dict[i])
+	for i in graph.vert_dict:
+		tempdistance = cost_distance(arbitrary_vert,graph.vert_dict[i])
 		if tempdistance < distance:
 			distance = tempdistance
 			close_vert = i
@@ -204,7 +117,7 @@ def closest_vert(x1,y1,vert_dict):
 #==========================================================================
 #==========================================================================
 
-def least_cost_path (graph, start, dest, cost, vert_dict):
+def least_cost_path (graph, start, dest, cost):
 	"""Find and return the least cost path in graph from start
 	vertex to dest vertex. Efficiency: If E is the number of edges,
 	the run-time is O( E log(E) ).
@@ -232,7 +145,7 @@ def least_cost_path (graph, start, dest, cost, vert_dict):
 
 		>>> cost = lambda u, v: weights.get((u, v), float("inf"))
 		>>> least_cost_path(graph, 1,5, cost) [1, 3, 6, 5] """
-	reached = dijkstras(start, graph, vert_dict)
+	reached = dijkstras(start, graph)
 	path = []
 	ID = dest
 	print(reached)
@@ -252,8 +165,7 @@ def least_cost_path (graph, start, dest, cost, vert_dict):
 
 def main():
 	filename = sys.argv[1]
-	graph,vert_dict = create_graph(filename)
-	#print(vert_dict)
+	graph = create_graph(filename)
 	print("Comunication started...")
 	while(True):
 		userin = input("Please enter the start and end coordinates: ").strip().split()
@@ -266,13 +178,13 @@ def main():
 
 				print("begin mayhem!!!")
 
-				start = closest_vert(startlat,startlon,vert_dict)
-				end = closest_vert(destlat,destlon,vert_dict)
+				start = closest_vert(startlat,startlon,graph)
+				end = closest_vert(destlat,destlon,graph)
 
 				#print(graph._alist)
 				#print("neighbors1: "+str(list(graph.neighbours_and_weights(start))))
 
-				path = least_cost_path(graph, start, end, 0, vert_dict)
+				path = least_cost_path(graph, start, end, 0)
 
 				print(path)
 
