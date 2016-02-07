@@ -1,7 +1,7 @@
 from heapq import *
 from math import sqrt
 import sys
-#R 5365386 -1133915 5364728 -11335891
+#R 5365386 -11333915 5364728 -11335891
 
 
 #==========================================================================
@@ -153,11 +153,11 @@ def dijkstras(start_vert, graph):
 
 	#While there are still runners traveling between nodes
     while(runners):
-        print("\nrunners: ", runners)
+        #print("\nrunners: ", runners)
 
         #get the least cost runner
         run = heappop(runners)
-        print("popped: ", run)
+        #print("popped: ", run)
         cost = run[0]
         dest = run[1]
         source = run[2]
@@ -170,13 +170,14 @@ def dijkstras(start_vert, graph):
         #start location and the cost it took to get there
         reached[dest] = (source, cost)
 
-        print("neighbours_and_weights: ", graph.neighbours_and_weights(dest))
+        #print("neighbours_and_weights: ", graph.neighbours_and_weights(dest))
         for adjacent in graph.neighbours_and_weights(dest):
             #print("dest: ", graph.vert_dict[dest])
             #print("adjacent: ", graph.vert_dict[adjacent[0]])
-            print("adjacent: ", adjacent)
+            #print("adjacent: ", adjacent)
             heappush(runners, (cost + cost_distance(graph.vert_dict[adjacent[0]], graph.vert_dict[dest]), adjacent[0], dest))
-    print("reached: ", reached)
+
+    #print("reached: ", reached)
     return reached
 
 #==========================================================================
@@ -246,16 +247,18 @@ def least_cost_path (graph, start, dest, cost):
         >>> cost = lambda u, v: weights.get((u, v), float("inf"))
         >>> least_cost_path(graph, 1,5, cost) [1, 3, 6, 5] """
     reached = dijkstras(start, graph)
-    path = []
     ID = dest
-    print(reached)
+    path = [ID]
+
+    #print(reached)
     cost = reached[dest][1]
-    print('ID: ', ID)
-    print('Start:', start)
+    #print('ID: ', ID)
+    #print('Start:', start)
     while(ID != start):
-        print(ID)
-        path.append(ID)
+        #print(ID)
         ID = reached[ID][0]
+        path.append(ID)
+
 
     return path
 
@@ -266,7 +269,7 @@ def least_cost_path (graph, start, dest, cost):
 def main():
     filename = sys.argv[1]
     graph = create_graph(filename)
-    print("Comunication started...")
+    #print("Comunication started...")
     while(True):
         userin = input("Please enter the start and end coordinates: ").strip().split()
         if len(userin) == 5:
@@ -276,7 +279,7 @@ def main():
                 destlat = userin[3]
                 destlon = userin[4]
 
-                print("begin mayhem!!!")
+                #print("begin mayhem!!!")
 
                 start = closest_vert(startlat,startlon,graph)
                 end = closest_vert(destlat,destlon,graph)
@@ -285,11 +288,16 @@ def main():
                 #print("neighbors1: "+str(list(graph.neighbours_and_weights(start))))
 
                 path = least_cost_path(graph, start, end, 0)
+                print('N ',len(path))
+                i = 0
+                while(True):
+                    client = input()
+                    if client == 'A':
+                        print(*(graph.vert_dict[path[i]]))
+                        i += 1
+                    elif client == 'E':
+                        break
 
-                print(path)
-
-                print("great success")
-        else: print("Invalid request.")
 
 
 if __name__ == '__main__':
